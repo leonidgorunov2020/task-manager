@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+
+{% block title %}Task Status Chart{% endblock %}
+{% block user %}{{ current_user.username }}{% endblock %}
+{% block content %}
+<h1>Task Status Chart</h1>
+<div class="chart-class">
+
+    <canvas id="taskStatusChart" width="100" height="100"></canvas>
+
+
+</div>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+var ctx = document.getElementById('taskStatusChart').getContext('2d');
+var taskStatusChart = new Chart(ctx, {
+    type: 'pie',
+    data: {
+        labels: ['Open Tasks', 'Closed Tasks'],
+        datasets: [{
+            data: [{{ open_tasks_count }}, {{ closed_tasks_count }}],
+            backgroundColor: ['#36A2EB', '#FF6384'],
+            hoverBackgroundColor: ['#36A2EB', '#FF6384']
+        }]
+    },
+    options: {
+        responsive: true,
+        plugins: {
+            legend: {
+                position: 'top',
+            },
+            tooltip: {
+                callbacks: {
+                    label: function(context) {
+                        var label = context.label || '';
+                        if (label) {
+                            label += ': ';
+                        }
+                        if (context.parsed !== null) {
+                            label += context.parsed;
+                        }
+                        return label;
+                    }
+                }
+            }
+        }
+    }
+});
+</script>
+{% endblock %}

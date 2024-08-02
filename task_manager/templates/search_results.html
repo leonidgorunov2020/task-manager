@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block user %}{{ username }}{% endblock %}
+<h1>{% block title %}Tasks list{% endblock %}</h1>
+{% block content %}
+<h1>Search Results</h1>
+<ul>
+    {% for task in search_results %}
+    <div class="rows">
+        <div class="col-sm-6 mb-3 mb-sm-0">
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title"> {{ task.title }}</h5>
+        <p class="card-text">{{ task.body }}</p>
+       <a class="btn btn-outline-dark" href="{{ url_for('view_task', task_id=task.id) }}" role="button">View task</a>
+      </div>
+    </div>
+  </div>
+    </div>
+
+    {% endfor %}
+</ul>
+
+{% endblock %}

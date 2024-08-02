@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+    {% block user %}{{ username }}{% endblock %}
+    <h1>{% block title %}Tasks list{% endblock %}</h1>
+{% block content %}
+<div class="page_title">{{page_title}}</div>
+    <ul class="list-group list-group-flush">
+        {% for task in tasks %}
+            <li class="list-group-item">
+                <div class="task-intro">
+                    Task: {{ task.title }} Exp: {{ task.expiration_date }}
+                </div>
+                <a class="btn btn-outline-dark" href="{{ url_for('view_task', task_id=task.id) }}" role="button">View task</a>
+                <a class="btn btn-outline-success" href="{{ url_for('update_task', task_id=task.id) }}" role="button">Update task</a>
+             <button type="button" class="btn btn-outline-primary">
+  Comments <span class="badge text-bg-secondary">{{ task.comments|length  }}</span>
+
+</button>
+                {% if is_admin %}
+                  <a class="btn btn-outline-danger" href="{{ url_for('delete_task', task_id=task.id) }}" role="button">Delete task</a>
+                 {% endif %}
+            </li>
+
+
+        </ul>
+        {% endfor %}
+    </ul>
+
+
+{% endblock %}

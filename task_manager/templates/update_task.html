@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+<h1>{% block title %}Update Task{% endblock %}</h1>
+{% block user %}{{ current_user.username }}{% endblock %}
+{% block content %}
+
+<form method="POST" action="{{ url_for('update_task', task_id=task.id) }}">
+  <div class="mb-3">
+    <label for="title" class="form-label">Title</label>
+    <input type="text" class="form-control" id="title" name="title" value="{{ task.title }}" aria-describedby="title" required>
+  </div>
+  <div class="mb-3">
+    <label for="body" class="form-label">Body</label>
+    <textarea id="body" name="body" class="form-control" aria-label="With textarea" required>{{ task.body }}</textarea>
+  </div>
+  <div class="mb-3">
+    <label for="expiration_date">Expiration Date:</label><br>
+    <input type="date" id="expiration_date" name="expiration_date" value="{{ task.expiration_date }}">
+  </div>
+  <div class="mb-3">
+    <label for="status" class="form-label">Status</label>
+    <select class="form-select" id="status" name="status" aria-label="Select status" required>
+      <option value="1" {% if task.status == 1 %}selected{% endif %}>Open</option>
+      <option value="0" {% if task.status == 0 %}selected{% endif %}>Closed</option>
+    </select>
+  </div>
+  {% if current_user.is_admin %}
+    <div class="mb-3">
+      <select class="form-select" id="user_id" name="user_id" aria-label="Select user">
+        <option value="">Select User</option>
+        {% for user in users %}
+          <option value="{{ user.id }}" {% if user.id == task.user_id %}selected{% endif %}>{{ user.username }}</option>
+        {% endfor %}
+      </select>
+    </div>
+  {% endif %}
+  <button type="submit" class="btn btn-primary">Save</button>
+  <a href="{{ url_for('list_tasks') }}" class="btn btn-secondary">Cancel</a>
+</form>
+
+{% endblock %}

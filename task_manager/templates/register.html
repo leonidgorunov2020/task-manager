@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block user %}{{ username }}{% endblock %}
+<h1>{% block title %}Tasks list{% endblock %}</h1>
+{% block content %}
+<div class="form_holder">
+    <h1>Register</h1>
+    <form method="POST">
+
+        <div class="mb-3">
+            <label for="username" class="form-label">Username</label>
+            <input type="text" class="form-control" id="username" name="username" placeholder="username" required>
+        </div>
+
+        <div class="mb-3">
+            <label for="password" class="form-label">Password</label>
+            <input type="password" class="form-control" id="password" name="password" placeholder="password" required>
+        </div>
+
+        <div class="mb-3">
+            <label for="email" class="form-label">Email</label>
+            <input type="text" class="form-control" id="email" name="email" placeholder="email" required>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-check-label" for="is_admin">Is Admin</label>
+            <input type="checkbox" class="form-check-input" id="is_admin" name="is_admin">
+        </div>
+
+
+        <button type="submit" class="btn btn-primary mb-3">Register</button>
+    </form>
+</div>
+
+{% endblock %}
+

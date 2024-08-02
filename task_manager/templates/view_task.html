@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+{% block user %}{{ username }}{% endblock %}
+<h1>{% block title %}Tasks list{% endblock %}</h1>
+{% block content %}
+<h1>View task</h1>
+<ul class="list-group">
+    <li class="list-group-item">Title: {{ task.title }}</li>
+    <li class="list-group-item">Task: {{ task.body }}</li>
+    <li class="list-group-item">Expiration date: {{ task.expiration_date }}</li>
+</ul>
+<a class="btn btn-outline-success" href="#" onclick="toggleCommentForm()" role="button">Add Comment</a>
+
+<form action="{{ url_for('add_comment', task_id=task.id) }}" method="POST" id="comment-form" style="display: none;"
+      onsubmit="submitComment(event)">
+
+    <div class="mb-3">
+        <textarea id="body" name="body" rows="4" cols="50"> </textarea>
+    </div>
+    <button type="submit" class="btn btn-outline-primary mb-3">Submit</button>
+</form>
+
+
+</li>
+<ul class="list-group custom_comments">
+    {% for comment in task.comments %}
+    <li class="list-group-item active" style="background: #78aaf0;">
+
+          <div class="row">
+    <div class="col">
+      Comment: {{ comment.body }}
+    </div>
+    <div class="col">
+      Posted on: {{comment.creation_date}}
+    </div>
+    <div class="col">
+      By: {{comment.comment_owner}}
+    </div>
+  </div>
+
+        <div class="comment-buttons">
+            <a href="{{ url_for('update_comment', comment_id=comment.id) }}" class="btn btn-success btn-sm"
+               role="button">Update comment</a>
+            <a href="{{ url_for('delete_comment', comment_id=comment.id) }}" class="btn btn-danger btn-sm"
+               role="button">Delete comment</a>
+
+            <form action="{{ url_for('update_comment', comment_id=comment.id) }}" method="POST" id="comment-form-update"
+                  style="display: none;"
+                  onsubmit="submitComment(event)">
+
+                <div class="mb-3">
+                    <textarea id="body" name="body" rows="4" cols="50"> </textarea>
+                </div>
+                <button type="submit" class="btn btn-outline-primary mb-3">Submit</button>
+            </form>
+
+        </div>
+    </li>
+    {% endfor %}
+    <script>
+        function toggleCommentForm() {
+            var form = document.getElementById('comment-form');
+            form.style.display = (form.style.display === 'none') ? 'block' : 'none';
+        }
+
+
+    </script>
+
+    <script>
+        function toggleCommentFormUpdate() {
+            var form = document.getElementById('comment-form-update');
+            form.style.display = (form.style.display === 'none') ? 'block' : 'none';
+        }
+
+
+    </script>
+    {% endblock %}

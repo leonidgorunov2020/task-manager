@@ -1,0 +1,18 @@
+.form_holder {
+width: 60%;
+margin: auto;
+}
+.page_title {
+font-size: 24px;
+border-bottom: 1px dotted;
+background: #abe3ab;
+margin-bottom: 20px;
+}
+.cfonts {
+    font-size: 14px;
+}
+
+.chart-class {
+width: 50%;
+margin: 0 auto;
+}
