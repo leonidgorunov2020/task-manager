@@ -5,7 +5,7 @@ Features:
 - custom login - manager recognition
 - add / view / delete / set status to tasks
 - add / view / delete comments
-- email notifications on email assignment
+- email notifications on task assignment
 - menu buttons:
   - Create task
   - View tasks
