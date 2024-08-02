@@ -1,5 +1,5 @@
 
-General functionality: Custom system for managing tasks
+General functionality: Custom system for managing tasks < /br>
 Features: 
 - user levels - managers and members
 - custom login - manager recognition
