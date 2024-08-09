@@ -1,11 +1,11 @@
+General functionality: Custom system for managing tasks 
 
-General functionality: Custom system for managing tasks
 Features: 
 - user levels - managers and members
 - custom login - manager recognition
 - add / view / delete / set status to tasks
 - add / view / delete comments
-- email notifications on email assignment
+- email notifications on task assignment
 - menu buttons:
   - Create task
   - View tasks
@@ -41,12 +41,14 @@ Features:
     - user_id
     - comment_owner
     - user
+
 Members can:
 - create task
 - delete own tasks
 - set status to own tasks
 - add comments
 - update / delete own comments
+
 Managers can:
 - create task and assign it to a member
 - delete any task
