@@ -28,8 +28,8 @@ def task_status_chart():
     # Query the number of open and closed tasks
     open_tasks_count = Task.query.filter_by(status=1).count()
     closed_tasks_count = Task.query.filter_by(status=0).count()
-
-    return render_template('task_status_chart.html', open_tasks_count=open_tasks_count, closed_tasks_count=closed_tasks_count)
+    is_admin = True if current_user.is_admin else False
+    return render_template('task_status_chart.html', open_tasks_count=open_tasks_count, closed_tasks_count=closed_tasks_count, is_admin=is_admin)
 
 
 @app.route('/register', methods=['GET', 'POST'])
@@ -88,15 +88,14 @@ def search_tasks():
 @login_required
 def list_tasks():
     if current_user.is_admin:
-        is_admin = True
         tasks = Task.query.filter_by( status=1).order_by(Task.expiration_date.asc()).options(
             joinedload(Task.comments)).all()
         user = current_user
     else:
-        is_admin = False
         tasks = Task.query.filter_by(user_id=current_user.id, status=1).order_by(Task.expiration_date.asc()).options(
             joinedload(Task.comments)).all()
         user = User.query.filter_by(id=current_user.id).first()
+    is_admin = True if current_user.is_admin else False
     return render_template('tasks.html', tasks=tasks, username=user.username, is_admin=is_admin)
 
 @app.route('/weekly_tasks', methods=['GET'])
@@ -104,12 +103,12 @@ def list_tasks():
 def weekly_tasks():
     one_week_from_today = date.today() + timedelta(days=7)
     if current_user.is_admin:
-        is_admin = True
         tasks = Task.query.filter_by(status=1).filter(Task.expiration_date <= one_week_from_today).order_by(Task.expiration_date.asc()).options(joinedload(Task.comments)).all()
     else:
         tasks = Task.query.filter_by(user_id=current_user.id, status=1).filter(Task.expiration_date <= one_week_from_today).order_by(Task.expiration_date.asc()).options(joinedload(Task.comments)).all()
     user = User.query.filter_by(id=current_user.id).first()
     page_title = "Weekly tasks"
+    is_admin = True if current_user.is_admin else False
     return render_template('tasks.html', tasks=tasks, username=user.username, page_title=page_title, is_admin=is_admin)
 
 @app.route('/closed', methods=['GET'])
@@ -117,11 +116,11 @@ def weekly_tasks():
 def closed_tasks():
     if current_user.is_admin:
         tasks = Task.query.filter_by(status=0)
-        is_admin = True
     else:
         tasks = Task.query.filter_by(user_id=current_user.id, status=0)
     user = User.query.filter_by(id=current_user.id).first()
     page_title = "Closed tasks"
+    is_admin = True if current_user.is_admin else False
     return render_template('tasks.html', tasks=tasks, username=user.username, page_title=page_title, is_admin=is_admin)
 
 @app.route('/monthly_tasks', methods=['GET'])
@@ -129,12 +128,12 @@ def closed_tasks():
 def monthly_tasks():
     one_week_from_today = date.today() + timedelta(days=30)
     if current_user.is_admin:
-        is_admin = True
         tasks = Task.query.filter_by(status=1).filter(Task.expiration_date <= one_week_from_today).order_by(Task.expiration_date.asc()).options(joinedload(Task.comments)).all()
     else:
         tasks = Task.query.filter_by(user_id=current_user.id, status=1).filter(Task.expiration_date <= one_week_from_today).order_by(Task.expiration_date.asc()).options(joinedload(Task.comments)).all()
     user = User.query.filter_by(id=current_user.id).first()
     page_title = "Montly tasks"
+    is_admin = True if current_user.is_admin else False
     return render_template('tasks.html', tasks=tasks, username=user.username, page_title=page_title, is_admin=is_admin)
 
 @app.route('/tasks/create', methods=['GET', 'POST'])
@@ -164,8 +163,7 @@ def create_task():
         return redirect(url_for('list_tasks'))
 
     users = User.query.all()
-    if current_user.is_admin:
-        is_admin = True
+    is_admin = True if current_user.is_admin else False
     return render_template('create_task.html', users=users, current_user=current_user, is_admin=is_admin)
 
 
@@ -189,8 +187,7 @@ def update_task(task_id):
         flash('Task updated successfully!', 'success')
         return redirect(url_for('list_tasks'))
     users = User.query.all()
-    if current_user.is_admin:
-        is_admin = True
+    is_admin = True if current_user.is_admin else False
     return render_template('update_task.html', users=users, task=task, is_admin=is_admin)
 
 
@@ -204,8 +201,7 @@ def view_task(task_id):
         flash('You are not authorized to update this task.', 'danger')
         return redirect(url_for('list_tasks'))
 
-    if current_user.is_admin:
-        is_admin = True
+    is_admin = True if current_user.is_admin else False
     return render_template('view_task.html', task=task, username=user.username, is_admin=is_admin)
 
 @app.route('/tasks/<int:task_id>/delete', methods=['GET'])
@@ -231,6 +227,9 @@ def add_comment(task_id):
 
     if request.method == 'POST':
         body = request.form['body']
+        if len(body) == 1:
+            flash('No empty comments allowed.', 'danger')
+            return redirect(url_for('list_tasks'))
         user_id = current_user.id  # Set the user_id based on the current user
 
         get_user = User.query.filter_by(id=current_user.id).first()
@@ -238,8 +237,7 @@ def add_comment(task_id):
         new_comment = Comment(body=body, task_id=task_id, user_id=current_user.id, comment_owner=username)
         db.session.add(new_comment)
         db.session.commit()
-        if current_user.is_admin:
-            is_admin = True
+        is_admin = True if current_user.is_admin else False
         return redirect(url_for('view_task', task_id=task_id, is_admin=is_admin))
 
 @app.route('/comments/<int:comment_id>/update', methods=['GET', 'POST'])
@@ -257,8 +255,7 @@ def update_comment(comment_id):
         db.session.commit()
         flash('Comment updated successfully!', 'success')
         return redirect(url_for('list_tasks'))
-    if current_user.is_admin:
-        is_admin = True
+    is_admin = True if current_user.is_admin else False
     return render_template('update_comment.html', comment=comment, is_admin=is_admin)
 
 

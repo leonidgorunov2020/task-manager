@@ -5,7 +5,7 @@
 <h1>View task</h1>
 <ul class="list-group">
     <li class="list-group-item">Title: {{ task.title }}</li>
-    <li class="list-group-item">Task: {{ task.body }}</li>
+    <li class="list-group-item">Task: {{ task.body | safe }}</li>
     <li class="list-group-item">Expiration date: {{ task.expiration_date }}</li>
 </ul>
 <a class="btn btn-outline-success" href="#" onclick="toggleCommentForm()" role="button">Add Comment</a>

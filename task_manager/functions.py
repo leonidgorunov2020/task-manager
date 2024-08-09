@@ -1,14 +1,14 @@
-import smtplibq
+import smtplib
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 
 
 def send_email(to_email, subject, message):
-    from_email = "valid_email"
-    smtp_server = "smtp_host"
+    from_email = "mailer@agk-law.com"
+    smtp_server = "mail.agk-law.com"
     smtp_port = 587
-    smtp_username = "smpt_user"
-    smtp_password = "smpt_pass"
+    smtp_username = "mailer@agk-law.com"
+    smtp_password = "Eh@MMWVCuu_S"
     # Create the MIME message
     msg = MIMEMultipart()
     msg['From'] = from_email

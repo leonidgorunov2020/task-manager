@@ -37,5 +37,12 @@
   <button type="submit" class="btn btn-primary">Save</button>
   <a href="{{ url_for('list_tasks') }}" class="btn btn-secondary">Cancel</a>
 </form>
-
+<script>
+  tinymce.init({
+    selector: '#body',  // Target the textarea by ID
+    plugins: 'lists link image preview code',  // Enable plugins as needed
+    toolbar: 'undo redo | formatselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image | code preview',  // Toolbar options
+    height: 300  // Height of the editor
+  });
+</script>
 {% endblock %}

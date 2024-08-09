@@ -15,7 +15,7 @@ Session(app)
 
 # Remove the import of datetime from here
 
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://user:pass@ip.ip.ip.ip/tm'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://root:leo123@172.17.0.2/tm'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.secret_key = 'super secret key'
 db = SQLAlchemy(app)
